@@ -1,0 +1,19 @@
+# Python-related files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.llm-verbal-skills-trainer-py3.11/
+poetry.lock
+
+# Logs & temp files
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Model & Cache Files
+.cache/
+models/

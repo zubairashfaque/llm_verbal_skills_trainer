@@ -9,6 +9,7 @@ venv/
 
 # Logs & temp files
 *.log
+logs/
 *.tmp
 *.swp
 .DS_Store

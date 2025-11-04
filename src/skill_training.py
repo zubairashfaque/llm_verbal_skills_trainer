@@ -3,11 +3,8 @@ import re
 import random
 import json
 import os
-from config.settings import PROMPTS
+from config.settings import PROMPTS, TRACKING_FILE
 from src.model_manager import generate_response, generate_response_parallel
-
-# Path to the task tracking JSON file
-TRACKING_FILE = "config/task_tracking.json"
 
 # Initialize the tracking file if it doesn't exist
 def initialize_tracking():

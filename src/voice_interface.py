@@ -3,9 +3,11 @@ import os
 import tempfile
 import subprocess
 import logging
+import time
+import threading
 from pathlib import Path
 import numpy as np
-from typing import Optional, Union
+from typing import Optional, Union, List
 import soundfile as sf
 from pydub import AudioSegment
 import noisereduce as nr
@@ -85,7 +87,7 @@ def preprocess_audio(audio_path: Path) -> Optional[Path]:
         return None
 
 
-def split_audio_into_chunks(audio_path: Path, chunk_duration_ms: int = CHUNK_DURATION_MS) -> list:
+def split_audio_into_chunks(audio_path: Path, chunk_duration_ms: int = CHUNK_DURATION_MS) -> List[Path]:
     """
     Splits the audio file into chunks of specified duration.
     Returns a list of paths to the chunk files.
@@ -175,7 +177,7 @@ def process_voice_input(audio_data: Union[str, Path, np.ndarray]) -> dict:
     return {"success": not transcription.startswith("Error:"), "transcription": transcription}
 
 
-def cleanup_temp_files(max_age_hours: int = 24):
+def cleanup_temp_files(max_age_hours: int = 24) -> None:
     """Removes temporary files older than the specified age"""
     current_time = time.time()
     for file_path in TEMP_DIR.glob("*"):
@@ -188,9 +190,6 @@ def cleanup_temp_files(max_age_hours: int = 24):
                 logger.error(f"Failed to remove temporary file {file_path}: {str(e)}")
 
 
-import time
-
-
-def schedule_cleanup():
+def schedule_cleanup() -> None:
     cleanup_temp_files()
     threading.Timer(6 * 60 * 60, schedule_cleanup).start()

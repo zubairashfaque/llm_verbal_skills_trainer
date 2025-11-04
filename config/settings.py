@@ -1,16 +1,33 @@
 # settings.py
+import os
+from dotenv import load_dotenv
 
-USE_4BIT = True  # If True, load model in 4-bit precision
-CACHE_SIZE = 64  # For caching responses
+# Load environment variables from .env file
+load_dotenv()
 
-# Whisper config (optional)
-WHISPER_MODEL = "medium.en"  # or "tiny.en", "small.en", etc.
+# LLM Configuration
+MODEL_NAME = os.getenv("MODEL_NAME", "llama3.2:latest")
+OLLAMA_SERVER_URL = os.getenv("OLLAMA_SERVER_URL", "http://127.0.0.1:11434/api/")
 
-# TTS config (optional)
-TTS_VOICE = "en-us-amy"  # Example voice ID (depends on the TTS library)
+# Model Optimization
+USE_4BIT = os.getenv("USE_4BIT", "true").lower() == "true"
+CACHE_SIZE = int(os.getenv("CACHE_SIZE", "64"))
 
-MODEL_NAME = "llama3.2:latest"  # The model label you use in Ollama
-OLLAMA_SERVER_URL = "http://127.0.0.1:11434/api/"  # Default Ollama URL
+# Whisper Configuration
+WHISPER_MODEL = os.getenv("WHISPER_MODEL", "medium.en")
+
+# TTS Configuration
+TTS_VOICE = os.getenv("TTS_VOICE", "en-us-amy")
+
+# Application Settings
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+TRACKING_FILE = os.getenv("TRACKING_FILE", "config/task_tracking.json")
+
+# Performance Settings
+MAX_TOKENS = int(os.getenv("MAX_TOKENS", "512"))
+NUM_WORKERS = int(os.getenv("NUM_WORKERS", "4"))
+TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
+NUM_CTX = int(os.getenv("NUM_CTX", "2048"))
 
 
 # Training prompts for skill modules

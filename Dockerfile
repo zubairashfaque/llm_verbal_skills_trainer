@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for LLM Verbal Skills Trainer
 
 # Stage 1: Builder
-FROM python:3.11-slim as builder
+FROM python:3.14-slim as builder
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -34,7 +34,7 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry install --only main --no-root --no-directory
 
 # Stage 2: Runtime
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \

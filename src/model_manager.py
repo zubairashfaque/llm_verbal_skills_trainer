@@ -1,18 +1,28 @@
 import requests
 import json
 import logging
-from config.settings import MODEL_NAME, OLLAMA_SERVER_URL
+from config.settings import (
+    MODEL_NAME,
+    OLLAMA_SERVER_URL,
+    CACHE_SIZE,
+    MAX_TOKENS,
+    NUM_WORKERS,
+    TEMPERATURE,
+    NUM_CTX,
+    LOG_LEVEL
+)
 from functools import lru_cache
 from cachetools import LRUCache, cached
 import multiprocessing
-# Set up logging
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
-response_cache = LRUCache(maxsize=128)  # ✅ Increased cache size
+# Set up logging
+logging.basicConfig(level=getattr(logging, LOG_LEVEL), format="%(asctime)s - %(levelname)s - %(message)s")
+
+response_cache = LRUCache(maxsize=CACHE_SIZE)
 
 @cached(cache=response_cache)  # ✅ First-level caching
-@lru_cache(maxsize=128)        # ✅ Second-level caching
-def generate_response(prompt: str, max_tokens: int = 512) -> str:
+@lru_cache(maxsize=CACHE_SIZE)        # ✅ Second-level caching
+def generate_response(prompt: str, max_tokens: int = MAX_TOKENS) -> str:
     """
     Calls the local Ollama server to generate text using the LLaMA-13B model.
     """
@@ -26,9 +36,9 @@ def generate_response(prompt: str, max_tokens: int = 512) -> str:
     payload = {
         "model": MODEL_NAME,
         "prompt": prompt,
-        "num_ctx": 2048,
+        "num_ctx": NUM_CTX,
         "num_gpu": 0,
-        "temperature": 0.7,
+        "temperature": TEMPERATURE,
         "max_tokens": max_tokens,
         "options": optimization
     }
@@ -71,10 +81,10 @@ def generate_response(prompt: str, max_tokens: int = 512) -> str:
 # --------------------------
 # MULTIPROCESSING WRAPPER
 # --------------------------
-def generate_response_parallel(prompt: str, max_tokens: int = 512):
+def generate_response_parallel(prompt: str, max_tokens: int = MAX_TOKENS):
     """
     Uses multiprocessing to generate responses in parallel.
     """
-    with multiprocessing.Pool(processes=4) as pool:  # ✅ 4 parallel workers
+    with multiprocessing.Pool(processes=NUM_WORKERS) as pool:
         result = pool.apply_async(generate_response, (prompt, max_tokens))
         return result.get()

@@ -28,9 +28,47 @@ The **LLM Verbal Skills Trainer** is designed to improve **verbal and communicat
 
 ---
 
-## ⚙️ **Setup Instructions**  
-### **1️⃣ Install Dependencies**  
-This project requires **Python 3.11**. Ensure it is installed before proceeding.  
+## ⚙️ **Setup Instructions**
+
+### 🐳 **Option 1: Docker (Recommended)**
+The fastest way to get started - everything included!
+
+```sh
+# 1. Clone the repository
+git clone <repository-url>
+cd llm_verbal_skills_trainer
+
+# 2. Copy environment file
+cp .env.example .env
+
+# 3. Start with Docker Compose
+make docker-run
+
+# Or using docker-compose directly
+docker-compose up -d
+```
+
+The application will be available at **http://localhost:7860**
+
+**Docker Commands:**
+```sh
+make docker-run        # Start application in production mode
+make docker-dev        # Start in development mode (hot reload)
+make docker-stop       # Stop containers
+make docker-logs       # View logs
+make docker-rebuild    # Rebuild and restart
+make docker-clean      # Clean up all resources
+```
+
+For detailed Docker deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+---
+
+### 💻 **Option 2: Manual Installation**
+For development or custom setups.
+
+#### **1️⃣ Install Dependencies**
+This project requires **Python 3.11**. Ensure it is installed before proceeding.
 
 ```sh
 # Install Poetry (for dependency management)
@@ -38,6 +76,24 @@ pip install poetry
 
 # Install project dependencies
 poetry install
+
+# For development (includes testing and linting tools)
+poetry install --with dev
+```
+
+#### **1.5️⃣ Environment Configuration**
+```sh
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env with your specific configuration (optional)
+# The defaults in .env.example work for most users
+nano .env
+```
+
+**Quick setup using Makefile:**
+```sh
+make setup  # Installs dependencies, sets up pre-commit hooks, and creates .env
 ```
 
 ### **2️⃣ Download & Install Ollama (for LLM inference)**  
@@ -269,3 +325,59 @@ Selecting the right LLM depends on your **use case and system resources**.
 ✅ **For Memory Efficiency:** Choose **DeepSeek-1.5B (INT8)**.  
 
 🚀 Ready to enhance your verbal skills? Start today! 💡
+
+---
+
+## 🛠 **Development & Contributing**
+
+We welcome contributions! Here's how to get started:
+
+### **Development Setup**
+```sh
+# Quick setup
+make setup
+
+# Or manual setup
+poetry install --with dev
+poetry run pre-commit install
+cp .env.example .env
+```
+
+### **Available Commands**
+```sh
+make help          # Show all available commands
+make lint          # Run linting checks
+make format        # Format code
+make test          # Run tests
+make test-cov      # Run tests with coverage
+make check         # Run all checks (lint + type-check + test)
+make run           # Run the application
+```
+
+### **Code Quality**
+- **Linting:** Ruff
+- **Type Checking:** MyPy
+- **Testing:** Pytest with coverage
+- **Pre-commit Hooks:** Automated quality checks
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+---
+
+## 📝 **Project Structure**
+```
+llm_verbal_skills_trainer/
+├── config/              # Configuration files
+│   ├── settings.py      # Environment-based settings
+│   └── task_tracking.json
+├── src/                 # Source code
+│   ├── conversation.py
+│   ├── model_manager.py
+│   ├── skill_training.py
+│   ├── voice_interface.py
+│   └── presentation_assessment.py
+├── tests/               # Test suite
+├── main.py              # Application entry point
+├── .env.example         # Environment variables template
+└── Makefile             # Development commands
+```

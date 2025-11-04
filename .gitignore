@@ -6,10 +6,10 @@ __pycache__/
 # Virtual environments
 venv/
 .llm-verbal-skills-trainer-py3.11/
-poetry.lock
 
 # Logs & temp files
 *.log
+logs/
 *.tmp
 *.swp
 .DS_Store
@@ -17,3 +17,27 @@ poetry.lock
 # Model & Cache Files
 .cache/
 models/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE specific files
+.idea/
+.vscode/
+*.iml
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+coverage.xml
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Gradio
+.gradio/

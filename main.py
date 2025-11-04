@@ -5,6 +5,7 @@ import gradio as gr
 import os
 import json
 import pandas as pd
+from config.settings import TRACKING_FILE
 from src.model_manager import generate_response
 from src.conversation import get_chat_feedback
 from src.skill_training import get_random_training_prompt, run_impromptu_speaking, run_storytelling, run_conflict_resolution, update_tracking
@@ -13,9 +14,6 @@ from src.presentation_assessment import assess_presentation
 
 selected_topic = None
 selected_time_limit = None
-
-# Path to the task tracking JSON file
-TRACKING_FILE = "config/task_tracking.json"
 
 def start_countdown(time_limit, countdown_callback, submit_callback):
     for remaining in range(time_limit, 0, -1):
@@ -120,30 +118,6 @@ def skill_training_voice(module: str, audio_path, history) -> list:
         history[-1] = {"role": "assistant", "content": "‍🏫 **Coach:** Error: Invalid module selected."}
         return history
 
-    history[-1] = {"role": "assistant", "content": eval_text}
-    # Update tracking
-    update_tracking(module, selected_challenge, transcript, feedback)
-    return history
-def skill_training_voice(module: str, audio_path, history) -> tuple:
-    history, transcript = process_voice_input_and_chat(audio_path, history)
-    if not transcript:
-        return history
-    if selected_challenge is None or selected_time_limit is None:
-        history.append({"role": "assistant", "content": "Error: Please generate a challenge first by clicking 'Get Your Challenge'."})
-        return history
-    history.append({"role": "assistant", "content": "Thinking..."})
-    if module == "Impromptu Speaking":
-        feedback = run_impromptu_speaking(transcript, selected_challenge, selected_time_limit)
-        eval_text = f"**🔹 Topic:** {feedback['challenge']}\n\n### 📌 **LLM Evaluation**\n{feedback['evaluation']}"
-    elif module == "Storytelling":
-        feedback = run_storytelling(transcript, selected_challenge)
-        eval_text = f"**📖 Story Prompt:** {feedback['challenge']}\n\n### 📌 **LLM Evaluation**\n{feedback['evaluation']}"
-    elif module == "Conflict Resolution":
-        feedback = run_conflict_resolution(transcript, selected_challenge)
-        eval_text = f"**⚖️ Conflict Scenario:** {feedback['challenge']}\n\n### 📌 **LLM Evaluation**\n{feedback['evaluation']}"
-    else:
-        history[-1] = {"role": "assistant", "content": "Error: Invalid module selected."}
-        return history
     history[-1] = {"role": "assistant", "content": eval_text}
     # Update tracking
     update_tracking(module, selected_challenge, transcript, feedback)

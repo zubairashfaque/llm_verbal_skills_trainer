@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-11-04
+
+### Added - Phase C: Modern Features & Production Readiness
+- CI/CD Pipeline
+  - GitHub Actions workflow with 6 automated jobs
+  - Lint job: Ruff code quality checks
+  - Type-check job: MyPy static analysis
+  - Test job: Pytest with coverage upload to Codecov
+  - Security job: Safety vulnerability scanning
+  - Build job: Package building with artifacts
+  - Docker job: Container image building
+- Dependabot configuration for automated updates
+  - Weekly Python dependency updates
+  - GitHub Actions version updates
+  - Docker base image updates
+- Docker support
+  - Multi-stage Dockerfile (builder + runtime)
+  - Production docker-compose.yml
+  - Development docker-compose.dev.yml with hot reload
+  - Non-root user for security
+  - Health checks for monitoring
+  - Model downloader service
+- Performance monitoring (`src/utils/performance.py`)
+  - PerformanceMetrics dataclass
+  - PerformanceMonitor class
+  - @monitor_performance decorator
+  - MetricsCollector for aggregation
+  - System metrics collection (CPU, memory, disk)
+  - JSONL-based metrics storage
+- Deployment documentation (`DEPLOYMENT.md`)
+  - Docker deployment guide (400+ lines)
+  - Production considerations
+  - Security checklist
+  - Monitoring & maintenance
+  - Troubleshooting guide
+- Dependencies: psutil (5.9.0)
+- Makefile Docker commands (9 new commands)
+
+### Changed - Phase C
+- README updated with Docker deployment option
+- Makefile enhanced with Docker operations
+
 ## [0.2.0] - 2025-11-04
 
 ### Added - Phase B: Testing & Quality Infrastructure

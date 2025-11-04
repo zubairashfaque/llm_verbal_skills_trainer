@@ -56,3 +56,31 @@ update: ## Update dependencies
 
 security: ## Run security audit
 	poetry run pip-audit || pip install pip-audit && poetry run pip-audit
+
+# Docker commands
+docker-build: ## Build Docker image
+	docker build -t llm-verbal-skills-trainer:latest .
+
+docker-run: ## Run application in Docker
+	docker-compose up -d
+
+docker-dev: ## Run application in development mode with Docker
+	docker-compose -f docker-compose.dev.yml up
+
+docker-stop: ## Stop Docker containers
+	docker-compose down
+
+docker-logs: ## View Docker logs
+	docker-compose logs -f app
+
+docker-shell: ## Open shell in Docker container
+	docker-compose exec app /bin/bash
+
+docker-clean: ## Clean up Docker resources
+	docker-compose down -v
+	docker system prune -f
+
+docker-rebuild: ## Rebuild and restart Docker containers
+	docker-compose down
+	docker-compose build --no-cache
+	docker-compose up -d

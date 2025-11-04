@@ -29,7 +29,45 @@ The **LLM Verbal Skills Trainer** is designed to improve **verbal and communicat
 ---
 
 ## ⚙️ **Setup Instructions**
-### **1️⃣ Install Dependencies**
+
+### 🐳 **Option 1: Docker (Recommended)**
+The fastest way to get started - everything included!
+
+```sh
+# 1. Clone the repository
+git clone <repository-url>
+cd llm_verbal_skills_trainer
+
+# 2. Copy environment file
+cp .env.example .env
+
+# 3. Start with Docker Compose
+make docker-run
+
+# Or using docker-compose directly
+docker-compose up -d
+```
+
+The application will be available at **http://localhost:7860**
+
+**Docker Commands:**
+```sh
+make docker-run        # Start application in production mode
+make docker-dev        # Start in development mode (hot reload)
+make docker-stop       # Stop containers
+make docker-logs       # View logs
+make docker-rebuild    # Rebuild and restart
+make docker-clean      # Clean up all resources
+```
+
+For detailed Docker deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+---
+
+### 💻 **Option 2: Manual Installation**
+For development or custom setups.
+
+#### **1️⃣ Install Dependencies**
 This project requires **Python 3.11**. Ensure it is installed before proceeding.
 
 ```sh
@@ -43,7 +81,7 @@ poetry install
 poetry install --with dev
 ```
 
-### **1.5️⃣ Environment Configuration**
+#### **1.5️⃣ Environment Configuration**
 ```sh
 # Copy the example environment file
 cp .env.example .env

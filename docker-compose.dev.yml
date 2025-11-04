@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Ollama LLM service
+  ollama:
+    image: ollama/ollama:latest
+    container_name: llm-trainer-ollama-dev
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+
+  # Development application (with hot reload)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: llm-trainer-app-dev
+    ports:
+      - "7860:7860"
+    environment:
+      - MODEL_NAME=llama3.2:latest
+      - OLLAMA_SERVER_URL=http://ollama:11434/api/
+      - LOG_LEVEL=DEBUG
+      - WHISPER_MODEL=base
+      - USE_4BIT=true
+      - CACHE_SIZE=64
+    volumes:
+      - .:/app  # Mount source code for hot reload
+      - /app/.venv  # Don't override virtual environment
+      - ./logs:/app/logs
+      - app_cache:/app/.cache
+    depends_on:
+      - ollama
+    command: poetry run python main.py
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+    driver: local
+  app_cache:
+    driver: local
+
+networks:
+  default:
+    name: llm-trainer-dev-network
